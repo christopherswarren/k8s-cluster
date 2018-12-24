@@ -1,0 +1,65 @@
+- name: Download etcd binaries
+  get_url:
+    url: https://github.com/coreos/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz
+    dest: /tmp
+    mode: 0440
+- name: Extract etcd binaries
+  unarchive:
+    src: /tmp/etcd-v3.3.9-linux-amd64.tar.gz
+    dest: /usr/local/bin
+- name: Copy etcd service definition
+  copy:
+    src: ../files/etcd.service
+    dest: /etc/systemd/system/etcd.service
+    owner: root
+    group: root
+    mode: 0644
+- name: Create etcd dir etc
+  file: 
+    path: /etc/etcd
+    state: directory
+- name: Create etcd dir var
+  file: 
+    path: /var/lib/etcd
+    state: directory  
+- name: Copy certs .......
+  copy:
+    src: 
+      - ca.pem
+      - kubernetes-key.pem
+      - kubernetes.pem
+    dest: /etc/etcd
+    owner: root
+    group: root
+    mode: 0644
+
+# don't forget to create the the folder:  
+#{
+#  sudo mkdir -p /etc/etcd /var/lib/etcd
+#  sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
+#}
+
+INTERNAL_IP=$(curl -s -H "Metadata-Flavor: Google" \
+  http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
+  
+  ETCD_NAME=$(hostname -s)
+
+  Create the etcd.service systemd unit file:
+
+cat <<EOF | sudo tee /etc/systemd/system/etcd.service
+
+Start the etcd Server
+{
+  sudo systemctl daemon-reload
+  sudo systemctl enable etcd
+  sudo systemctl start etcd
+}
+
+Verification
+List the etcd cluster members:
+
+sudo ETCDCTL_API=3 etcdctl member list \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/etcd/ca.pem \
+  --cert=/etc/etcd/kubernetes.pem \
+  --key=/etc/etcd/kubernetes-key.pem
