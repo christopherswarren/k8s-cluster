@@ -1,0 +1,5 @@
+Need to add a load balancer.  Maybe deploy an nginx/haproxy/traefik container on kws node and add a hosts entry on all.
+
+For private/nat IP we should probably be able to use the one issued by vbox.
+
+Health checks need to be setup with the API server at https://127.0.0.1:6443/healthz
