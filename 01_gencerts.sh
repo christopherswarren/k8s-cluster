@@ -8,6 +8,8 @@ SSHKEY="/mnt/secure/keys/chris.key"
 this_box=`vboxmanage list vms | grep kws | awk '{ gsub("\"", ""); print $1 }'`
 KUBERNETES_PUBLIC_ADDRESS=`vboxmanage guestproperty get ${this_box} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
 
+chmod -R +x ./shell/*
+
 ./shell/01_ssl/04_ca.sh
 ./shell/01_ssl/04.01_admin.sh
 ./shell/01_ssl/04.02_kubelet-client.sh
