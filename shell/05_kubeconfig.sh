@@ -1,11 +1,10 @@
 #!/bin/sh
 
 # This script will generate and distribute kube configs
-SSHUSR="chris"
-SSHKEY="/home/chris/chris.key"
-
+SSHUSR=$1
+SSHKEY=$2
 #this var should be for an external load balancer typically, in this case run the script on kc1 and use the public ip of that node
-KUBERNETES_PUBLIC_ADDRESS=$(hostname -I | awk '{print  $2}')
+KUBERNETES_PUBLIC_ADDRESS=$3 # $(hostname -I | awk '{print  $2}')
 
 for instance in kn1 kn2 kn3; do
   kubectl config set-cluster kubernetes-the-hard-way \
