@@ -3,10 +3,13 @@
 # This must be done on all controllers if not using an external etcd cluster
 
 # The instance internal IP address will be used to serve client requests and communicate with etcd cluster peers. Retrieve the internal IP address for the current compute instance:
+CLUSTER_NODE1=$1
+CLUSTER_NODE2=$2
+CLUSTER_NODE3=$3
 
 ETCD_NAME=$(hostname -s)
 
-INTERNAL_IP=$1
+INTERNAL_IP=$4
 #$(hostname -I | awk '{print  $1}') #$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
 
 wget -q --show-progress --https-only --timestamping \
@@ -43,7 +46,7 @@ ExecStart=/usr/local/bin/etcd \\
   --listen-client-urls https://${INTERNAL_IP}:2379,https://127.0.0.1:2379 \\
   --advertise-client-urls https://${INTERNAL_IP}:2379 \\
   --initial-cluster-token etcd-cluster-0 \\
-  --initial-cluster controller-0=https://10.240.0.10:2380,controller-1=https://10.240.0.11:2380,controller-2=https://10.240.0.12:2380 \\
+  --initial-cluster controller-0=https://${CLUSTER_NODE1}:2380,controller-1=https:/${CLUSTER_NODE2}:2380,controller-2=https://${CLUSTER_NODE3}:2380 \\
   --initial-cluster-state new \\
   --data-dir=/var/lib/etcd
 Restart=on-failure
