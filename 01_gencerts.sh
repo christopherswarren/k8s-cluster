@@ -22,3 +22,13 @@ chmod -R +x ./shell/*
 
 ./shell/05_kubeconfig.sh ${SSHUSR} ${SSHKEY} ${KUBERNETES_PUBLIC_ADDRESS}
 ./shell/06_data-encryption-conf-key.sh ${SSHUSR} ${SSHKEY}
+
+# install etcd on controllers
+for instance in kc1 kc2 kc3; do
+  THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
+  EXTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
+  INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/0/V4/IP" | awk '{ print $2}'`
+
+  scp -i $SSHKEY ./shell/07_etcd.sh ${SSHUSR}@${EXTERNAL_IP}:/tmp
+  ssh -t -i $SSHKEY ${SSHUSR}@${EXTERNAL_IP} /tmp/07_etcd.sh ${INTERNAL_IP}
+done
