@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # The DNS Cluster Add-on
 # Deploy the coredns cluster add-on:

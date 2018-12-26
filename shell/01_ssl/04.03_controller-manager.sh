@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/bin/sh
+
+# Can be run from anywhere.
 
 {
 
-cat > kube-proxy-csr.json <<EOF
+cat > kube-controller-manager-csr.json <<EOF
 {
-  "CN": "system:kube-proxy",
+  "CN": "system:kube-controller-manager",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -13,7 +15,7 @@ cat > kube-proxy-csr.json <<EOF
     {
       "C": "US",
       "L": "Fort Worth",
-      "O": "system:node-proxier",
+      "O": "system:kube-controller-manager",
       "OU": "Kubernetes The Hard Way",
       "ST": "Texas"
     }
@@ -26,6 +28,6 @@ cfssl gencert \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
-  kube-proxy-csr.json | cfssljson -bare kube-proxy
+  kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
 
 }

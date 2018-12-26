@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Script will generate data enc config and key
 SSHUSR="chris"

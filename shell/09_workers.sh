@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Must be run on all worker nodes
 

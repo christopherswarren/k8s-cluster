@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-KUBERNETES_PUBLIC_ADDRESS=$(hostname -I | awk '{print  $2}')
+# Run anywaywere, pass IP address of load balancer
+
+KUBERNETES_PUBLIC_ADDRESS=$1
 
 {
 

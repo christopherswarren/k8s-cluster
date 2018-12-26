@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/bin/sh
+
+# Can be run from anywhere.
 
 {
 
-cat > kube-controller-manager-csr.json <<EOF
+cat > admin-csr.json <<EOF
 {
-  "CN": "system:kube-controller-manager",
+  "CN": "admin",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -13,7 +15,7 @@ cat > kube-controller-manager-csr.json <<EOF
     {
       "C": "US",
       "L": "Fort Worth",
-      "O": "system:kube-controller-manager",
+      "O": "system:masters",
       "OU": "Kubernetes The Hard Way",
       "ST": "Texas"
     }
@@ -26,6 +28,6 @@ cfssl gencert \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
-  kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+  admin-csr.json | cfssljson -bare admin
 
 }

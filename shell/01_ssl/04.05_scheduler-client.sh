@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/bin/sh
+
+# Can be run from anywhere.
 
 {
 
-cat > admin-csr.json <<EOF
+cat > kube-scheduler-csr.json <<EOF
 {
-  "CN": "admin",
+  "CN": "system:kube-scheduler",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -13,7 +15,7 @@ cat > admin-csr.json <<EOF
     {
       "C": "US",
       "L": "Fort Worth",
-      "O": "system:masters",
+      "O": "system:kube-scheduler",
       "OU": "Kubernetes The Hard Way",
       "ST": "Texas"
     }
@@ -26,6 +28,6 @@ cfssl gencert \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
-  admin-csr.json | cfssljson -bare admin
+  kube-scheduler-csr.json | cfssljson -bare kube-scheduler
 
 }

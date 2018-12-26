@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/sh
+
+# Can be run from anywhere.
+
 {
 
 cat > ca-config.json <<EOF

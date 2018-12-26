@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This must be done on all controllers if not using an external etcd cluster
 

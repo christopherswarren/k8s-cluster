@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Each kubeconfig requires a Kubernetes API Server to connect to.
 # To support high availability the IP address assigned to the external load balancer fronting the Kubernetes API Servers will be used.

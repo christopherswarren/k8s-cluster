@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-# This script will generate and disctribute kube configs
+# This script will generate and distribute kube configs
 SSHUSR="chris"
 SSHKEY="/home/chris/chris.key"
 

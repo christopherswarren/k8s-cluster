@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 Print the internal IP address and Pod CIDR range for each worker instance:
 

@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
-SSHUSR="chris"
-SSHKEY="/home/chris/chris.key"
+# Run from whereever you ran the cert generation scripts.
+
+SSHUSR=$1
+SSHKEY=$2
 
 for instance in kn1 kn2 kn3; do
   scp -i ${SSHKEY} \

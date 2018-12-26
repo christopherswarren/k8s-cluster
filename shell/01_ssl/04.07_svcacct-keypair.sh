@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+
+# Can be run from anywhere.
 
 {
 
