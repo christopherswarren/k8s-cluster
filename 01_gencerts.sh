@@ -15,7 +15,7 @@ chmod -R +x ./shell/*
 ./shell/01_ssl/04.02_kubelet-client.sh
 ./shell/01_ssl/04.03_controller-manager.sh
 ./shell/01_ssl/04.04_kube-proxy.sh
-./shell/01_ssl/04.05_scheduler_client.sh
+./shell/01_ssl/04.05_scheduler-client.sh
 ./shell/01_ssl/04.06_api-server.sh ${KUBERNETES_PUBLIC_ADDRESS}
 ./shell/01_ssl/04.07_svcacct-keypair.sh
 ./shell/01_ssl/04.99_dist-keys.sh ${SSHUSR} ${SSHKEY}
