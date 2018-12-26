@@ -21,3 +21,4 @@ chmod -R +x ./shell/*
 ./shell/01_ssl/04.99_dist-keys.sh ${SSHUSR} ${SSHKEY}
 
 ./shell/05_kubeconfig.sh ${SSHUSR} ${SSHKEY} ${KUBERNETES_PUBLIC_ADDRESS}
+./shell/06_data-encryption-conf-key.sh ${SSHUSR} ${SSHKEY}
