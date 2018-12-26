@@ -6,11 +6,10 @@
 CLUSTER_NODE1=$1
 CLUSTER_NODE2=$2
 CLUSTER_NODE3=$3
-
-ETCD_NAME=$(hostname -s)
-
 INTERNAL_IP=$4
 #$(hostname -I | awk '{print  $1}') #$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
+
+ETCD_NAME=$(hostname -s)
 
 wget -q --show-progress --https-only --timestamping \
   "https://github.com/coreos/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz"
@@ -46,7 +45,7 @@ ExecStart=/usr/local/bin/etcd \\
   --listen-client-urls https://${INTERNAL_IP}:2379,https://127.0.0.1:2379 \\
   --advertise-client-urls https://${INTERNAL_IP}:2379 \\
   --initial-cluster-token etcd-cluster-0 \\
-  --initial-cluster controller-0=https://${CLUSTER_NODE1}:2380,controller-1=https://${CLUSTER_NODE2}:2380,controller-2=https://${CLUSTER_NODE3}:2380 \\
+  --initial-cluster ${ETCD_NAME}=https://${INTERNAL_IP}:2380,controller-0=https://${CLUSTER_NODE1}:2380,controller-1=https://${CLUSTER_NODE2}:2380,controller-2=https://${CLUSTER_NODE3}:2380 \\
   --initial-cluster-state new \\
   --data-dir=/var/lib/etcd
 Restart=on-failure
