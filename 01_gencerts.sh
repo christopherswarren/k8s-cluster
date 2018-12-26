@@ -30,7 +30,7 @@ CLUSTER_BOX2=`vboxmanage list vms | grep kc2 | awk '{ gsub("\"", ""); print $1 }
 CLUSTER_NODE2=`vboxmanage guestproperty get ${CLUSTER_BOX2} "/VirtualBox/GuestInfo/Net/0/V4/IP" | awk '{ print $2}'`
 CLUSTER_BOX3=`vboxmanage list vms | grep kc3 | awk '{ gsub("\"", ""); print $1 }'`
 CLUSTER_NODE3=`vboxmanage guestproperty get ${CLUSTER_BOX3} "/VirtualBox/GuestInfo/Net/0/V4/IP" | awk '{ print $2}'`
-INITIAL_CLUSTER="kc1=https://${$CLUSTER_NODE1}:2380,kc2=https://${$CLUSTER_NODE2}:2380,kc3=https://${$CLUSTER_NODE3}:2380"
+INITIAL_CLUSTER="kc1=https://${CLUSTER_NODE1}:2380,kc2=https://${CLUSTER_NODE2}:2380,kc3=https://${CLUSTER_NODE3}:2380"
 
 for instance in kc1 kc2 kc3; do
   THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
@@ -38,5 +38,5 @@ for instance in kc1 kc2 kc3; do
   INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/0/V4/IP" | awk '{ print $2}'`
 
   scp -i $SSHKEY ./shell/07_etcd.sh ${SSHUSR}@${EXTERNAL_IP}:/tmp
-  ssh -t -i $SSHKEY ${SSHUSR}@${EXTERNAL_IP} /tmp/07_etcd.sh ${INTERNAL_IP} ${INITIAL_CLUSTER}
+  ssh -t -i $SSHKEY ${SSHUSR}@${EXTERNAL_IP} /tmp/07_etcd.sh $INTERNAL_IP $INITIAL_CLUSTER
 done

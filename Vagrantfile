@@ -45,25 +45,27 @@ servers=[
 
 Vagrant.configure(2) do |config|
   servers.each do |machine|
+    @IP_ADDRESS=IP_NET+$ip_start.to_s
+    puts("Provisioning box:", machine[:hostname], "with IP address:", @IP_ADDRESS)
     config.vm.define machine[:hostname] do |node|
       node.vm.box = MYBOX #machine[:box]
       node.vm.hostname = machine[:hostname]
-      node.vm.network "public_network", ip: IP_NET+$ip_start.to_s, bridge: NETIFACE
+      node.vm.network "public_network", ip: @IP_ADDRESS, bridge: NETIFACE
       node.vm.provider "virtualbox" do |vb|
         vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
         vb.customize ["modifyvm", :id, "--cpus", machine[:cpu]]
       end
       node.vm.provision "shell", env: {"PUPPET_ENV" => PUPPET_ENV}, inline: <<-SHELL
-	    sudo wget https://apt.puppetlabs.com/puppet6-release-xenial.deb -O /tmp/puppet.deb 
+	      sudo wget https://apt.puppetlabs.com/puppet6-release-xenial.deb -O /tmp/puppet.deb
       	sudo dpkg -i /tmp/puppet.deb
-	    sudo rm /tmp/puppet.deb
-	    sudo apt-get update
-	    sudo apt-get install puppet-agent -y
-	    sudo mkdir -p /etc/puppetlabs/code/environments/${PUPPET_ENV}
-	    sudo echo "[main]\nenvironment=${PUPPET_ENV}" > /etc/puppetlabs/puppet/puppet.conf
-	    sudo systemctl restart puppet
-      SHELL
-    end
-	$ip_start += 1
+	      sudo rm /tmp/puppet.deb
+	      sudo apt-get update
+	      sudo apt-get install puppet-agent -y
+	      sudo mkdir -p /etc/puppetlabs/code/environments/${PUPPET_ENV}
+	      sudo echo "[main]\nenvironment=${PUPPET_ENV}" > /etc/puppetlabs/puppet/puppet.conf
+	      sudo systemctl restart puppet
+        SHELL
+      end
+	  $ip_start += 1
   end
 end
