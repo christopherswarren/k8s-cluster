@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Script will generate data enc config and key
-SSHUSR="chris"
-SSHKEY="/home/chris/chris.key"
+SSHUSR=$1
+SSHKEY=$2
 
 ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
 
@@ -21,6 +21,8 @@ resources:
 EOF
 
 for instance in kc1 kc2 kc3; do
+  THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
+  MY_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
   scp -i $SSHKEY \
-    encryption-config.yaml $SSHUSR@${instance}:~/
+    encryption-config.yaml $SSHUSR@${MY_IP}:~/
 done
