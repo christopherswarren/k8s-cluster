@@ -9,42 +9,49 @@ servers=[
   {
     :hostname => "kc1",
     :ip => "192.168.1.101",
+    :ip_pri => "172.16.0.101",
     :ram => 2048,
     :cpu => 1
   },
   {
     :hostname => "kc2",
     :ip => "192.168.1.102",
+    :ip_pri => "172.16.0.102",
     :ram => 2048,
     :cpu => 1
   },
   {
     :hostname => "kc3",
     :ip => "192.168.1.103",
+    :ip_pri => "172.16.0.103",
     :ram => 2048,
     :cpu => 1
   },
   {
     :hostname => "kn1",
     :ip => "192.168.1.104",
+    :ip_pri => "172.16.0.104",
     :ram => 4096,
     :cpu => 2
   },
   {
     :hostname => "kn2",
     :ip => "192.168.1.105",
+    :ip_pri => "172.16.0.105",
     :ram => 4096,
     :cpu => 2
   },
   {
     :hostname => "kn3",
     :ip => "192.168.1.106",
+    :ip_pri => "172.16.0.106",
     :ram => 4096,
     :cpu => 2
   },
   {
     :hostname => "kws",
     :ip => "192.168.1.107",
+    :ip_pri => "172.16.0.107",
     :ram => 1024,
     :cpu => 1 
   }
@@ -58,6 +65,8 @@ Vagrant.configure(2) do |config|
       node.vm.box = MYBOX #machine[:box]
       node.vm.hostname = machine[:hostname]
       node.vm.network "public_network", ip: machine[:ip], bridge: NETIFACE
+      node.vm.network "private_network", ip: machine[:ip_pri]
+      #node.vm.network "public_network", ip: @IP_ADDRESS, bridge: NETIFACE
       node.vm.provider "virtualbox" do |vb|
         vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
         vb.customize ["modifyvm", :id, "--cpus", machine[:cpu]]
