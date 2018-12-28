@@ -12,7 +12,15 @@ chmod -R +x ./shell/*
 
 ./shell/01_ssl/04_ca.sh
 ./shell/01_ssl/04.01_admin.sh
-./shell/01_ssl/04.02_kubelet-client.sh
+
+for instance in kn1 kn2 kn3; do
+  echo "Instance: ${instance}"
+  this_box=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
+  external_ip=`vboxmanage guestproperty get ${this_box} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
+  internal_ip=`vboxmanage guestproperty get ${this_box} "/VirtualBox/GuestInfo/Net/2/V4/IP" | awk '{ print $2}'`
+  ./shell/01_ssl/04.02_kubelet-client.sh ${instance} ${external_ip} ${internal_ip}
+done
+
 ./shell/01_ssl/04.03_controller-manager.sh
 ./shell/01_ssl/04.04_kube-proxy.sh
 ./shell/01_ssl/04.05_scheduler-client.sh
@@ -35,7 +43,7 @@ INITIAL_CLUSTER="kc1=https://${CLUSTER_NODE1}:2380,kc2=https://${CLUSTER_NODE2}:
 for instance in kc1 kc2 kc3; do
   THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
   EXTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
-  INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/0/V4/IP" | awk '{ print $2}'`
+  INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/2/V4/IP" | awk '{ print $2}'`
 
   scp -i $SSHKEY ./shell/07_etcd.sh ${SSHUSR}@${EXTERNAL_IP}:/tmp
   ssh -t -i $SSHKEY ${SSHUSR}@${EXTERNAL_IP} /tmp/07_etcd.sh $INTERNAL_IP $INITIAL_CLUSTER
