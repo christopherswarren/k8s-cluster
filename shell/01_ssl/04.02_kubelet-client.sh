@@ -29,6 +29,6 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=${instance},${external_ip},${internal_ip} \
+  -hostname="${instance},${external_ip},${internal_ip}" \
   -profile=kubernetes \
   ${instance}-csr.json | cfssljson -bare ${instance}

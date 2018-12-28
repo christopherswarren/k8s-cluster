@@ -33,6 +33,8 @@ done
 ./shell/01_ssl/04.07_svcacct-keypair.sh
 ./shell/01_ssl/04.99_dist-keys.sh ${SSHUSR} ${SSHKEY}
 
+THIS_BOX=`vboxmanage list vms | grep kws | awk '{ gsub("\"", ""); print $1 }'`
+KUBERNETES_PUBLIC_ADDRESS=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
 ./shell/05_kubeconfig.sh ${SSHUSR} ${SSHKEY} ${KUBERNETES_PUBLIC_ADDRESS}
 ./shell/06_data-encryption-conf-key.sh ${SSHUSR} ${SSHKEY}
 
