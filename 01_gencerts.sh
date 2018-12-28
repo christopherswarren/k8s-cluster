@@ -26,7 +26,8 @@ lb_address=""
 for instance in kc1 kc2 kc3 kws; do
   THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
   EXTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
-  lb_address="${lb_address},${EXTERNAL_IP}"
+  INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/2/V4/IP" | awk '{ print $2}'`
+  lb_address="${lb_address},${EXTERNAL_IP},${INTERNAL_IP}"
 done
 ./shell/01_ssl/04.06_api-server.sh ${lb_address}
 
