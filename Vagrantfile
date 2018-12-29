@@ -72,7 +72,7 @@ Vagrant.configure(2) do |config|
         vb.customize ["modifyvm", :id, "--cpus", machine[:cpu]]
       end
       node.vm.provision "shell", env: {"PUPPET_ENV" => PUPPET_ENV}, inline: <<-SHELL
-	      sudo wget https://apt.puppetlabs.com/puppet6-release-xenial.deb -O /tmp/puppet.deb
+	      sudo wget https://apt.puppetlabs.com/puppet6-release-bionic.deb -O /tmp/puppet.deb
       	sudo dpkg -i /tmp/puppet.deb
 	      sudo rm /tmp/puppet.deb
 	      sudo apt-get update
