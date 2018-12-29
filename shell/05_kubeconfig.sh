@@ -6,6 +6,7 @@ SSHKEY=$2
 #this var should be for an external load balancer typically, in this case run the script on kc1 and use the public ip of that node
 KUBERNETES_PUBLIC_ADDRESS=$3 # $(hostname -I | awk '{print  $2}')
 
+# The kubelet Kubernetes Configuration File
 for instance in kn1 kn2 kn3; do
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
@@ -27,6 +28,7 @@ for instance in kn1 kn2 kn3; do
   kubectl config use-context default --kubeconfig=${instance}.kubeconfig
 done
 
+# The kube-proxy Kubernetes Configuration File
 {
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
@@ -48,6 +50,7 @@ done
   kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
 }
 
+# The kube-controller-manager Kubernetes Configuration File
 {
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
@@ -69,6 +72,7 @@ done
   kubectl config use-context default --kubeconfig=kube-controller-manager.kubeconfig
 }
 
+# The kube-scheduler Kubernetes Configuration File
 {
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
@@ -90,6 +94,7 @@ done
   kubectl config use-context default --kubeconfig=kube-scheduler.kubeconfig
 }
 
+# The admin Kubernetes Configuration File
 {
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
@@ -111,6 +116,7 @@ done
   kubectl config use-context default --kubeconfig=admin.kubeconfig
 }
 
+# Distribute the Kubernetes Configuration Files
 for instance in kn1 kn2 kn3; do
   THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
   MY_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
