@@ -3,7 +3,7 @@ PUPPET_ENV = "cultclassik_prod"
 #IP_NET = "192.168.1."
 #$ip_start = 100
 
-MYBOX = "ubuntu/xenial64"
+MYBOX = "ubuntu/bionic64"
 
 servers=[
   {
