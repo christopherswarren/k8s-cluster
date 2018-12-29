@@ -23,7 +23,7 @@ EOF
 for instance in kc1 kc2 kc3; do
   THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
   MY_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
-  
+
   scp -i $SSHKEY \
     encryption-config.yaml $SSHUSR@${MY_IP}:~/
 done
