@@ -8,29 +8,16 @@ cat > ca-config.json <<EOF
 {
   "signing": {
     "default": {
-      "expiry": "26280h"
+      "expiry": "8760h"
     },
     "profiles": {
       "kubernetes": {
         "usages": ["signing", "key encipherment", "server auth", "client auth"],
-        "expiry": "26280h"
+        "expiry": "8760h"
       },
       "client": {
-          "expiry": "1000000h",
-          "usages": [
-              "signing",
-              "key encipherment",
-              "client auth"
-          ]
-      },
-      "peer": {
-          "expiry": "43800h",
-          "usages": [
-              "signing",
-              "key encipherment",
-              "server auth",
-              "client auth"
-          ]
+        "usages": ["signing","key encipherment","client auth"],
+        "expiry": "8760h"
       }
     }
   }
