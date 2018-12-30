@@ -30,7 +30,7 @@ for instance in kc1 kc2 kc3 kws; do
   INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/2/V4/IP" | awk '{ print $2}'`
   lb_address="${lb_address},${EXTERNAL_IP},${INTERNAL_IP}"
 done
-lb_address="${lb_address:1}"
+lb_address=`echo ${lb_address} | cut -c 1-`
 
 ../shell/01_ssl/04.06_api-server.sh ${lb_address}
 ../shell/01_ssl/04.07_svcacct-keypair.sh
