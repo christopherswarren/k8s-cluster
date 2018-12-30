@@ -18,6 +18,7 @@ done
 ./04.04_kube-proxy.sh
 ./04.05_scheduler-client.sh
 
+# build string to pass along to api server cert gen script
 lb_address=""
 for instance in kc1 kc2 kc3 kws; do
   THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
