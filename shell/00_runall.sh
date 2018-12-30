@@ -5,7 +5,7 @@ SSHKEY="/mnt/secure/keys/chris.key"
 
 chmod -R +x ./*.sh
 
-./04_gencerts.sh
+./04_ssl/04_gencerts.sh
 ./04_ssl/04.99_dist-keys.sh ${SSHUSR} ${SSHKEY}
 
 THIS_BOX=`vboxmanage list vms | grep kws | awk '{ gsub("\"", ""); print $1 }'`
