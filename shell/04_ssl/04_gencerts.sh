@@ -3,7 +3,7 @@
 # Run from VBox host
 #KUBERNETES_PUBLIC_ADDRESS=$(hostname -I | awk '{print  $2}')
 
-./04_ca.sh
+./04.00_ca.sh
 ./04.01_admin.sh
 
 for instance in kn1 kn2 kn3; do

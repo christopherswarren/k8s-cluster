@@ -10,7 +10,7 @@ for instance in kn1 kn2 kn3; do
   MY_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
   scp -i ${SSHKEY} \
     ca.pem \
-    ${instance}-key.pem
+    ${instance}-key.pem \
     ${instance}.pem \
     ${SSHUSR}@${MY_IP}:~/
 done

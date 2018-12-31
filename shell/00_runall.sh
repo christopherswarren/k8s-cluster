@@ -27,6 +27,6 @@ for instance in kc1 kc2 kc3; do
   EXTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
   INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/2/V4/IP" | awk '{ print $2}'`
 
-  scp -i $SSHKEY ./shell/07_etcd.sh ${SSHUSR}@${EXTERNAL_IP}:/tmp
+  scp -i $SSHKEY ./07_etcd.sh ${SSHUSR}@${EXTERNAL_IP}:/tmp
   ssh -t -i $SSHKEY ${SSHUSR}@${EXTERNAL_IP} /tmp/07_etcd.sh $INTERNAL_IP $INITIAL_CLUSTER
 done
