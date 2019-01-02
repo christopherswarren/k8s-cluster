@@ -2,6 +2,10 @@
 
 SSHUSR="chris"
 SSHKEY="/mnt/secure/keys/chris.key"
+# for controllers
+CLUSTER_CIDR="10.200.0.0/16"
+# for worker nodes
+POD_CIDR="192.168.5.0/24"
 
 chmod -R +x ./*.sh
 
@@ -51,3 +55,15 @@ THIS_BOX=`vboxmanage list vms | grep kc1 | awk '{ gsub("\"", ""); print $1 }'`
 EXTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
 scp -i $SSHKEY ./08.01_rbac.sh ${SSHUSR}@${EXTERNAL_IP}:/tmp
 ssh -t -i $SSHKEY ${SSHUSR}@${EXTERNAL_IP} /tmp/08.01_rbac.sh
+
+########################################
+# bootstrap worker nodes
+########################################
+for instance in kn1 kn2 kn3; do
+  THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
+  EXTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
+  INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/2/V4/IP" | awk '{ print $2}'`
+
+  scp -i $SSHKEY ./09_workers.sh ${SSHUSR}@${EXTERNAL_IP}:/tmp
+  ssh -t -i $SSHKEY ${SSHUSR}@${EXTERNAL_IP} /tmp/09_workers.sh $POD_CIDR
+done

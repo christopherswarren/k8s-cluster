@@ -2,6 +2,8 @@
 
 # Must be run on all worker nodes
 
+POD_CIDR=$1
+
 {
   sudo apt-get update
   sudo apt-get -y install socat conntrack ipset
@@ -40,8 +42,8 @@ sudo mkdir -p \
 
 # Configure CNI Networking
 #Retrieve the Pod CIDR range for the current compute instance:
-POD_CIDR=$(curl -s -H "Metadata-Flavor: Google" \
-  http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cidr)
+#POD_CIDR=$(curl -s -H "Metadata-Flavor: Google" \
+#  http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cidr)
 
 # Create the bridge network configuration file:
 cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
