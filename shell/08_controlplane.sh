@@ -3,11 +3,12 @@
 # Must be run on all controllers
 
 #The instance internal IP address will be used to advertise the API Server to members of the cluster. Retrieve the internal IP address for the current compute instance:
-INTERNAL_IP=$(curl -s -H "Metadata-Flavor: Google" \
-  http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
+INTERNAL_IP=$1
+ETCD_SERVERS=$2
 
 sudo mkdir -p /etc/kubernetes/config
 
+# Download and Install the Kubernetes Controller Binaries
 wget -q --show-progress --https-only --timestamping \
   "https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-apiserver" \
   "https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-controller-manager" \
@@ -19,6 +20,7 @@ wget -q --show-progress --https-only --timestamping \
   sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
 }
 
+# Configure the Kubernetes API Server
 {
   sudo mkdir -p /var/lib/kubernetes/
 
@@ -50,7 +52,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --etcd-cafile=/var/lib/kubernetes/ca.pem \\
   --etcd-certfile=/var/lib/kubernetes/kubernetes.pem \\
   --etcd-keyfile=/var/lib/kubernetes/kubernetes-key.pem \\
-  --etcd-servers=https://10.240.0.10:2379,https://10.240.0.11:2379,https://10.240.0.12:2379 \\
+  --etcd-servers=${ETCD_SERVERS} \\
   --event-ttl=1h \\
   --experimental-encryption-provider-config=/var/lib/kubernetes/encryption-config.yaml \\
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \\
@@ -76,6 +78,11 @@ EOF
 sudo mv kube-controller-manager.kubeconfig /var/lib/kubernetes/
 
 #Create the kube-controller-manager.service systemd unit file:
+############ note:
+# --service-cluster-ip-range
+# CIDR Range for Services in cluster. Requires --allocate-node-cidrs to be true
+# --cluster-cidr
+# CIDR Range for Pods in cluster. Requires --allocate-node-cidrs to be true
 cat <<EOF | sudo tee /etc/systemd/system/kube-controller-manager.service
 [Unit]
 Description=Kubernetes Controller Manager
