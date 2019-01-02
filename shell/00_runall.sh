@@ -36,7 +36,7 @@ done
 ########################################
 # bootstrap control plane
 ########################################
-ETCD_SERVERS=`echo ${INITIAL_CLUSTER} | awk '{ gsub("2380", "2379"); print $1 }'`
+ETCD_SERVERS=`echo ${INITIAL_CLUSTER} | awk '{ gsub(/kc[0-9]=/, ""); gsub("2380", "2379"); print $1 }'`
 for instance in kc1 kc2 kc3; do
   THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
   EXTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
