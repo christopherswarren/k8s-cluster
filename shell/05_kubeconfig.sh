@@ -133,3 +133,9 @@ for instance in kc1 kc2 kc3; do
   scp -i $SSHKEY \
     admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig ${SSHUSR}@${MY_IP}:~/
 done
+
+# Also copy kubeconfig to the lb/workstation
+THIS_BOX=`vboxmanage list vms | grep kws | awk '{ gsub("\"", ""); print $1 }'`
+MY_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/1/V4/IP" | awk '{ print $2}'`
+
+scp -i $SSHKEY admin.kubeconfig ${SSHUSR}@${MY_IP}:~/

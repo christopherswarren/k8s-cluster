@@ -3,8 +3,9 @@
 Print the internal IP address and Pod CIDR range for each worker instance:
 
 for instance in kn1 kn2 kn3; do
-  gcloud compute instances describe ${instance} \
-    --format 'value[separator=" "](networkInterfaces[0].networkIP,metadata.items[0].value)'
+  #gcloud compute instances describe ${instance} --format 'value[separator=" "](networkInterfaces[0].networkIP,metadata.items[0].value)'
+    THIS_BOX=`vboxmanage list vms | grep ${instance} | awk '{ gsub("\"", ""); print $1 }'`
+    INTERNAL_IP=`vboxmanage guestproperty get ${THIS_BOX} "/VirtualBox/GuestInfo/Net/2/V4/IP" | awk '{ print $2}'`
 done
 
 #Routes

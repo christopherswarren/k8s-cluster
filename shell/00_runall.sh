@@ -6,6 +6,7 @@ SSHKEY="/mnt/secure/keys/chris.key"
 CLUSTER_CIDR="10.200.0.0/16"
 # for worker nodes
 POD_CIDR="192.168.5.0/24"
+API_LB_IP="192.168.1.107"
 
 chmod -R +x ./*.sh
 
@@ -66,4 +67,8 @@ for instance in kn1 kn2 kn3; do
 
   scp -i $SSHKEY ./09_workers.sh ${SSHUSR}@${EXTERNAL_IP}:/tmp
   ssh -t -i $SSHKEY ${SSHUSR}@${EXTERNAL_IP} /tmp/09_workers.sh $POD_CIDR
+  #List the registered Kubernetes nodes:
+  kubectl get nodes --kubeconfig admin.kubeconfig
 done
+
+./10_kubectl-ra.sh ${API_LB_IP}

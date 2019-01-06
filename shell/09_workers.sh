@@ -3,6 +3,7 @@
 # Must be run on all worker nodes
 
 POD_CIDR=$1
+NODE_NAME=`uname -n`
 
 {
   sudo apt-get update
@@ -118,8 +119,8 @@ EOF
 
 # Configure the Kubelet
 {
-  sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
-  sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+  sudo mv ${NODE_NAME}-key.pem ${NODE_NAME}.pem /var/lib/kubelet/
+  sudo mv ${NODE_NAME}.kubeconfig /var/lib/kubelet/kubeconfig
   sudo mv ca.pem /var/lib/kubernetes/
 }
 
@@ -142,8 +143,8 @@ clusterDNS:
 podCIDR: "${POD_CIDR}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
-tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
-tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
+tlsCertFile: "/var/lib/kubelet/${NODE_NAME}.pem"
+tlsPrivateKeyFile: "/var/lib/kubelet/${NODE_NAME}-key.pem"
 EOF
 
 # The resolvConf configuration is used to avoid loops when using CoreDNS for service discovery on systems running systemd-resolved.
@@ -206,7 +207,3 @@ EOF
   sudo systemctl enable containerd kubelet kube-proxy
   sudo systemctl start containerd kubelet kube-proxy
 }
-
-# Verification
-#List the registered Kubernetes nodes:
-kubectl get nodes --kubeconfig admin.kubeconfig
